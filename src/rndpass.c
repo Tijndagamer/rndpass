@@ -23,10 +23,25 @@
 
 int main(int argc, char *argv[])
 {
-    unsigned char buffer[64];
-    bzero(buffer, sizeof(buffer));
-    printf("%d random bytes read\n" , randstr(buffer, sizeof(buffer), 0));
-    for (int i = 0; i < 64; i++) {
-        printf("%d\t%c\n", buffer[i], buffer[i]);
+    int opt, n, len = 25;
+    bool verbose = false;
+
+    while ((opt = getopt(argc, argv, "l:v")) != -1) {
+        switch (opt) {
+            case 'l':
+                len = atoi(optarg) + 1;
+                break;
+            case 'v':
+                verbose = true;
+                break;
+            default:
+                error(-1, 0, "Usage: %s [-l len]", argv[0]);
+        }
     }
+    unsigned char buffer[len];
+    bzero(buffer, len);
+    n = randstr(buffer, sizeof(buffer), 0);
+    if (verbose)
+        printf("%d random bytes read\n", n);
+    printf("%s", buffer);
 }
