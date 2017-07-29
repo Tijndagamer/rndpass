@@ -27,7 +27,9 @@
 #include <linux/random.h>
 #include <sys/syscall.h>
 #include <stdio.h>
+#include <strings.h>
 
+int countnull(unsigned char buffer[], size_t buflen);
 int getrandom(void *buffer, size_t buflen, unsigned int flags);
 int randstr(unsigned char s[], size_t slen, unsigned int flags);
 

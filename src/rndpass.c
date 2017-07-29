@@ -23,11 +23,10 @@
 
 int main(int argc, char *argv[])
 {
-    unsigned char buffer[256];
+    unsigned char buffer[64];
     bzero(buffer, sizeof(buffer));
-    printf("%d\n" , randstr(buffer, sizeof(buffer), 0));
-    //printf("%d\n", getrandom(buffer, sizeof(buffer), 0));
-    for (int i = 0; i < 256; i++) {
+    printf("%d random bytes read\n" , randstr(buffer, sizeof(buffer), 0));
+    for (int i = 0; i < 64; i++) {
         printf("%d\t%c\n", buffer[i], buffer[i]);
     }
 }

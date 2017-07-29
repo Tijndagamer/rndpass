@@ -20,6 +20,19 @@
 
 #include "passgen.h"
 
+// Count null bytes in string
+int countnull(unsigned char buffer[], size_t buflen)
+{
+    int n = 0;
+    //int len = sizeof(buffer);
+    for (int i = 0; i < buflen; i++) {
+        if (buffer[i] == '\0')
+            ++n;
+    }
+
+    return n;
+}
+
 // Wrapper for getrandom syscall
 int getrandom(void *buffer, size_t buflen, unsigned int flags)
 {
@@ -31,16 +44,24 @@ int getrandom(void *buffer, size_t buflen, unsigned int flags)
 int randstr(unsigned char s[], size_t slen, unsigned int flags)
 {
     unsigned char buffer[slen];
-    int n;
+    int n = 0, j = 0;
 
-    n = getrandom(buffer, slen, flags);
-
-    for (int i = 0; i < slen; i++) {
-        if (buffer[i] > 32 && buffer[i] < 127) {
-            // Character is printable, add to s
-            s[i] = buffer[i];
+    // Optimization possibility: instead of getting slen new random
+    // bytes each run, decrease this ammount, but make sure that the amount
+    // of reads stays minimal.
+    while (countnull(s, slen) > 0) {
+        bzero(buffer, slen);
+        n += getrandom(buffer, slen, flags);
+        for (int i = 0; i < slen; i++) {
+            if (buffer[i] > 32 && buffer [i] < 127) {
+                s[j++] = buffer[i];
+                if (j >= slen)
+                    break;
+            }
         }
     }
+    // Make sure that the string is null terminated.
+    s[slen-1] = '\0';
 
     return n;
 }
