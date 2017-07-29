@@ -1,5 +1,5 @@
 /*                                                                             
- * passgen.h                                                                   
+ * passgen.c                                                                   
  * This file is part of rndpass.                                               
  *                                                                             
  * Copyright (c) 2017 Martijn (MrTijn/Tijndagamer)                             
@@ -18,17 +18,29 @@
  * along with rndpass.  If not, see <http://www.gnu.org/licenses/>.*           
  */
 
-#ifndef PASSGEN_h
-#define PASSGEN_h
+#include "passgen.h"
 
-#define _GNU_SOURCE
+// Wrapper for getrandom syscall
+int getrandom(void *buffer, size_t buflen, unsigned int flags)
+{
+    return syscall(SYS_getrandom, buffer, buflen, flags);    
+}
 
-#include <unistd.h>
-#include <linux/random.h>
-#include <sys/syscall.h>
-#include <stdio.h>
+// Generate random string, store in s, slen long. Returns total read random
+// bytes. s will only contain standard printable ASCII characters.
+int randstr(unsigned char s[], size_t slen, unsigned int flags)
+{
+    unsigned char buffer[slen];
+    int n;
 
-int getrandom(void *buffer, size_t buflen, unsigned int flags);
-int randstr(unsigned char s[], size_t slen, unsigned int flags);
+    n = getrandom(buffer, slen, flags);
 
-#endif
+    for (int i = 0; i < slen; i++) {
+        if (buffer[i] > 32 && buffer[i] < 127) {
+            // Character is printable, add to s
+            s[i] = buffer[i];
+        }
+    }
+
+    return n;
+}

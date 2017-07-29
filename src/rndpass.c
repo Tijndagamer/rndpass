@@ -1,5 +1,5 @@
 /*                                                                             
- * passgen.h                                                                   
+ * rndpass.c                                                                   
  * This file is part of rndpass.                                               
  *                                                                             
  * Copyright (c) 2017 Martijn (MrTijn/Tijndagamer)                             
@@ -18,17 +18,16 @@
  * along with rndpass.  If not, see <http://www.gnu.org/licenses/>.*           
  */
 
-#ifndef PASSGEN_h
-#define PASSGEN_h
+#include "rndpass.h"
+#include "passgen.h"
 
-#define _GNU_SOURCE
-
-#include <unistd.h>
-#include <linux/random.h>
-#include <sys/syscall.h>
-#include <stdio.h>
-
-int getrandom(void *buffer, size_t buflen, unsigned int flags);
-int randstr(unsigned char s[], size_t slen, unsigned int flags);
-
-#endif
+int main(int argc, char *argv[])
+{
+    unsigned char buffer[256];
+    bzero(buffer, sizeof(buffer));
+    printf("%d\n" , randstr(buffer, sizeof(buffer), 0));
+    //printf("%d\n", getrandom(buffer, sizeof(buffer), 0));
+    for (int i = 0; i < 256; i++) {
+        printf("%d\t%c\n", buffer[i], buffer[i]);
+    }
+}
