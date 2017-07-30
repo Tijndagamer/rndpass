@@ -1,8 +1,8 @@
 CC = gcc
 VPATH = src
 CFLAGS = -I include
-SRC = src/
 HEADERS = $(wildcard include/*.h)
+SRC = $(wildcard src/*.c)
 OBJ = rndpass.o passgen.o
 EXEC = rndpass
 
