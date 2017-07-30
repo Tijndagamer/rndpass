@@ -29,8 +29,10 @@
 #include <stdio.h>
 #include <strings.h>
 
+const char base64_chars[64];
 int countnull(unsigned char buffer[], size_t buflen);
 int getrandom(void *buffer, size_t buflen, unsigned int flags);
 int randstr(unsigned char s[], size_t slen, unsigned int flags);
+int randstr_alt(char s[], size_t slen, unsigned int flags);
 
 #endif
