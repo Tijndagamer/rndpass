@@ -33,10 +33,8 @@ const char *version_info = "rndpass 0.1\nCopyright (c) 2017 Martijn (MrTijn/Tijn
 enum { NORMAL, ALTERNATIVE, VERSION, EXTENDED } mode;
 
 // Function for operating modes
-void normal(bool verbose, int len);
+void normal(bool verbose, int len, bool ext);
 void alternative(bool verbose, int len);
-//void version(void);
-//void extended(void);
 
 int main(int argc, char *argv[]);
 

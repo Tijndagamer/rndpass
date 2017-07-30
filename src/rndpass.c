@@ -28,35 +28,37 @@ int main(int argc, char *argv[])
     bool verbose = false;
 
     mode = NORMAL;
-    while ((opt = getopt(argc, argv, "l:vaV")) != -1) {
+    while ((opt = getopt(argc, argv, "l:vaVe")) != -1) {
         switch (opt) {
-            // Specify length
             case 'l':
                 len = atoi(optarg) + 1;
                 break;
-            // Verbose output
             case 'v':
                 verbose = true;
                 break;
-            // Alternative randstr
             case 'a':
                 mode = ALTERNATIVE;
                 break;
-            // Version
             case 'V':
                 mode = VERSION;
                 break;
+            case 'e':
+                mode = EXTENDED;
+                break;
             default:
-                error(-1, 0, "Usage: %s [-l len] [-v] [-a]", argv[0]);
+                error(-1, 0, "Usage: %s [-l len] [-aevV]", argv[0]);
         }
     }
 
     switch (mode) {
         case NORMAL:
-            normal(verbose, len);
+            normal(verbose, len, false);
             break;
         case ALTERNATIVE:
             alternative(verbose, len);
+            break;
+        case EXTENDED:
+            normal(verbose, len, true);
             break;
         case VERSION:
             printf("%s", version_info);
@@ -66,16 +68,20 @@ int main(int argc, char *argv[])
     }
 }
 
-void normal(bool verbose, int len)
+/* Normal operation using randstr and a limited set of the standard printable
+ * ASCII characters.
+ * */
+void normal(bool verbose, int len, bool ext)
 {
     int n;
 	unsigned char buffer[len];
-	n = randstr(buffer, sizeof(buffer), 0);
+	n = randstr(buffer, sizeof(buffer), 0, ext);
 	if (verbose)
 		printf("%d random bytes read\n", n);
 	printf("%s\n", buffer);
 }
 
+/* Using randstr_alt */
 void alternative(bool verbose, int len)
 {
     int n;

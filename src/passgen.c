@@ -46,7 +46,7 @@ int getrandom(void *buffer, size_t buflen, unsigned int flags)
 /* Generate random string, store in s, slen long. Returns total read random
  * bytes. s will only contain standard printable ASCII characters.
  */
-int randstr(unsigned char s[], size_t slen, unsigned int flags)
+int randstr(unsigned char s[], size_t slen, unsigned int flags, bool ext)
 {
     unsigned char buffer[slen];
     int n = 0, j = 0;
@@ -59,18 +59,24 @@ int randstr(unsigned char s[], size_t slen, unsigned int flags)
         bzero(buffer, slen);
         n += getrandom(buffer, slen, flags);
         for (int i = 0; i < slen; i++) {
-            /* This if statement defines which ASCII characters will be thrown
-             * away, maybe define this in a header file for better customizabilitiy?
-             */
-            if (buffer[i] > 32 && buffer [i] < 127) {
-                s[j++] = buffer[i];
-                if (j >= slen)
-                    break;
+            if (ext) {
+                // Allow all ASCII printable characters
+                if (buffer[i] > 32 && buffer [i] < 127) {
+                    s[j++] = buffer[i];
+                    if (j >= slen)
+                        break;
+                }
+            } else {
+                if (buffer[i] == 33 || buffer[i] > 34 && buffer[i] < 39 || buffer[i] > 47 && buffer[i] < 58 || buffer[i] > 63 && buffer[i] < 91 || buffer[i] > 96 && buffer[i] < 123) {
+                    s[j++] = buffer[i];
+                    if (j >= slen)
+                        break;
+                }
             }
         }
     }
     // Make sure that the string is null terminated.
-    s[slen-1] = '\0';
+    s[slen - 1] = '\0';
 
     return n;
 }
