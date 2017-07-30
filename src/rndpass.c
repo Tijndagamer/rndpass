@@ -21,27 +21,67 @@
 #include "rndpass.h"
 #include "passgen.h"
 
+
 int main(int argc, char *argv[])
 {
-    int opt, n, len = 25;
+    int opt, len = 25;
     bool verbose = false;
 
-    while ((opt = getopt(argc, argv, "l:v")) != -1) {
+    mode = NORMAL;
+    while ((opt = getopt(argc, argv, "l:vaV")) != -1) {
         switch (opt) {
+            // Specify length
             case 'l':
                 len = atoi(optarg) + 1;
                 break;
+            // Verbose output
             case 'v':
                 verbose = true;
                 break;
+            // Alternative randstr
+            case 'a':
+                mode = ALTERNATIVE;
+                break;
+            // Version
+            case 'V':
+                mode = VERSION;
+                break;
             default:
-                error(-1, 0, "Usage: %s [-l len]", argv[0]);
+                error(-1, 0, "Usage: %s [-l len] [-v] [-a]", argv[0]);
         }
     }
-    unsigned char buffer[len];
-    bzero(buffer, len);
-    n = randstr(buffer, sizeof(buffer), 0);
-    if (verbose)
-        printf("%d random bytes read\n", n);
-    printf("%s", buffer);
+
+    switch (mode) {
+        case NORMAL:
+            normal(verbose, len);
+            break;
+        case ALTERNATIVE:
+            alternative(verbose, len);
+            break;
+        case VERSION:
+            printf("%s", version_info);
+            break;
+        default:
+            error(-1, 0, "Unspecified mode");
+    }
+}
+
+void normal(bool verbose, int len)
+{
+    int n;
+	unsigned char buffer[len];
+	n = randstr(buffer, sizeof(buffer), 0);
+	if (verbose)
+		printf("%d random bytes read\n", n);
+	printf("%s\n", buffer);
+}
+
+void alternative(bool verbose, int len)
+{
+    int n;
+	if (verbose)
+		printf("Using alternative character conversion\n");
+	char buffer[len];
+	n = randstr_alt(buffer, len, 0);
+	printf("%d random bytes read\n", n);
 }
