@@ -29,3 +29,9 @@ while true; do $generator; done | pv -t -b -r > test.txt
 | python equivalent | ~590B/s         |
 
 (Benchmarks ran on a ThinkPad X200 with an Intel Core2Duo P8600 CPU)
+
+License
+=======
+
+rndpass is licensed under the [GNU General Public License 3](https://www.gnu.org/licenses/gpl-3.0.html), or (at your option),
+any later version.
