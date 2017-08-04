@@ -56,7 +56,7 @@ int randstr(unsigned char s[], size_t slen, unsigned int flags, bool ext)
      * of reads stays minimal.
      */
     while (countnull(s, slen) > 0) {
-        bzero(buffer, slen);
+        memset(buffer, 0, slen);
         n += getrandom(buffer, slen, flags);
         for (int i = 0; i < slen; i++) {
             if (ext) {
@@ -93,8 +93,8 @@ int randstr_alt(char s[], size_t slen, unsigned int flags)
     unsigned long buffer[blen];
     int n, j = 0, k = blen - 1;
 
-    bzero(s, slen);
-    bzero(buffer, blen);
+    memset(s, 0, slen);
+    memset(buffer, 0, blen);
 
     n = getrandom(&buffer, sizeof(buffer), flags);
     for (int i = 0; i < blen; i++) {

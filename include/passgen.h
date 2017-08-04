@@ -27,7 +27,7 @@
 #include <linux/random.h>
 #include <sys/syscall.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdbool.h>
 
 const char base64_chars[64];
