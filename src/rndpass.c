@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
                 mode = HELP;
                 break;
             default:
-                error(-1, 0, "Usage: %s [-l len] [-aevV]", argv[0]);
+                fprintf(stderr, "Usage: %s [-l len] [-aevV]\n", argv[0]);
         }
     }
 
@@ -70,13 +70,14 @@ int main(int argc, char *argv[])
             printf("%s", help_text);
             break;
         default:
-            error(-1, 0, "Unspecified mode");
+            fprintf(stderr, "Illegal mode specified\n");
     }
 }
 
-/* Normal operation using randstr and a limited set of the standard printable
- * ASCII characters.
- * */
+/* Normal operation using randstr. Limits to a more limited set of ASCII
+ * printable characters if ext is false, uses all ASCII printable characters
+ * when ext is true.
+ */
 void normal(bool verbose, int len, bool ext)
 {
     int n;
@@ -87,7 +88,7 @@ void normal(bool verbose, int len, bool ext)
 	printf("%s\n", buffer);
 }
 
-/* Using randstr_alt */
+/* Using randstr_alt (WIP) */
 void alternative(bool verbose, int len)
 {
     int n;

@@ -26,7 +26,6 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <error.h>
 #include <strings.h>
 
 const char *version_info = "rndpass 0.1\nCopyright (c) 2017 Martijn (MrTijn/Tijndagamer\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n";
